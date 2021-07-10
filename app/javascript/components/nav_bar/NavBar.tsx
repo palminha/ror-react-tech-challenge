@@ -1,9 +1,16 @@
 import * as React from 'react';
+import { AppBar, Toolbar, Typography } from '@material-ui/core';
 import { useState, FunctionComponent } from 'react';
 
 function NavBar () { 
     return (
-      <h3>The NavBar will be here</h3>
+        <AppBar position="static">
+            <Toolbar>
+            <Typography variant="h6">
+                About
+            </Typography>
+            </Toolbar>
+        </AppBar>
     );
   }
   
