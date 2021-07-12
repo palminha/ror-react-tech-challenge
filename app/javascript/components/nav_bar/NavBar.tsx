@@ -3,25 +3,23 @@ import { AppBar, Link, Toolbar, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useState, FunctionComponent } from 'react';
 
-const useStyles = makeStyles(theme => ({
-    menuButton: {
-      marginRight: theme.spacing(2),
+const useStyles = makeStyles({
+    menuLink: {
+      margin: '20px',
     },
-    title: {
-      flexGrow: 1,
-    },
-  }));
+  });
 
 function NavBar () { 
+    const classes = useStyles();
     return (
         <AppBar position="static">
             <Toolbar>
             <Typography variant="h6">
-                <Link href="/users" color="inherit">
-                    &nbsp;Users&nbsp;
+                <Link href="/users" color="inherit" className={classes.menuLink}>
+                    Users
                 </Link>
                 <Link href="/about" color="inherit">
-                    &nbsp;About&nbsp;
+                    About
                 </Link>
             </Typography>
             </Toolbar>
