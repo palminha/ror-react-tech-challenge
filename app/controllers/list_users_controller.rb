@@ -7,7 +7,6 @@ class ListUsersController < ApplicationController
     end
 
     def add
-        puts ("add user: #{params.inspect}")
-        #user = GithubUser.create(username:params[:username], description:"teste2")
+        GithubUser.create(username:params[:username], description:"teste2")
     end
 end

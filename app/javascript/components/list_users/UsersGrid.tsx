@@ -17,68 +17,84 @@ export interface Props {
     users: string[];
 }
 
-function buildGridCards(props:Props) {
-    const itemList = props.users.map((i) => (
-        <Grid container spacing={2} justifyContent="center">
-        <Grid item>
-        <Card>
-        <CardContent>
-        <Typography variant='h5' component='h2'>
-        {i}
-        </Typography>
-        </CardContent>
-        </Card>
-        </Grid>
-        </Grid>
-    ));
-    return itemList;
-}
+export class UsersGrid extends React.Component<Props, any> {
 
-//const handleSubmit = (event) => {
-function handleSubmit(event) {
-    event.preventDefault();
+    constructor(props) {
+        super(props);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.state = {
+            username: ""
+          }
+      }
 
-    const data = new FormData();
-    data.append('username', "teste");
+     buildGridCards(props) {
+        const itemList = props.users.map((i) => (
+            <Grid item>
+            <Card>
+            <CardContent>
+            <Typography variant='h5' component='h2'>
+            {i}
+            </Typography>
+            </CardContent>
+            </Card>
+            </Grid>
+        ));
+        return itemList;
+    }
 
-    // You can include CSRF token for form_authenticity validation
-    const config = {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-            'Accept': 'application/json'
-        }
+    handleInputChange(event){
+        this.setState({
+            username: event.target.value
+          });
+    }
+
+    //const handleSubmit = (event) => {
+    handleSubmit(event) {
+        event.preventDefault();
+        const data = new FormData();
+        data.append('username', this.state.username);
+
+        // You can include CSRF token for form_authenticity validation
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Accept': 'application/json'
+            }
+        };
+
+        // Post data to /houses endpoint and update state upon response
+        axios.post('/users', data, config);
     };
 
-    // Post data to /houses endpoint and update state upon response
-    axios.post('/users', data, config);
-};
+    buildTitleAndSearchElement() {
+        return(
+            <Box width="100%" bgcolor="grey.300" p={1} style={{textAlign: 'right'}}>
+            <FormControl>
+            <form id="add_user_form" action="/users" method="post" onSubmit={this.handleSubmit}>
+            <FormGroup row={true}>
+                    <TextField id="username" name="username" required label="GitHub Username" variant="outlined" onChange={this.handleInputChange.bind(this)}/>
+                    <Box m={1}>
+                    <Button type="submit" variant="contained" color="primary">
+                        Add User
+                    </Button>
+                    </Box>
+            </FormGroup>
+            </form>
+            </FormControl>
+            </Box>
+        )
+    }
 
-function buildTitleAndSearchElement() {
-    return(
-        <Box width="100%" bgcolor="grey.300" p={1} style={{textAlign: 'right'}}>
-        <FormControl>
-        <form id="add_user_form" action="/users" method="post" onSubmit={handleSubmit}>
-        <FormGroup row={true}>
-                <TextField id="username" required label="GitHub Username" variant="outlined"/>
-                <Box m={1}>
-                <Button type="submit" variant="contained" color="primary">
-                    Add User
-                </Button>
-                </Box>
-        </FormGroup>
-        </form>
-        </FormControl>
-        </Box>
-    )
+    render() {
+        return (
+            <div>
+                {this.buildTitleAndSearchElement()}
+                <Grid container spacing={2} justifyContent="center">
+                    {this.buildGridCards(this.props)}
+                </Grid>
+            </div>
+        )
+    }
 }
-
-const UsersGrid: FunctionComponent<Props> = (props:Props) => {
-    return (
-        <div>
-            {buildTitleAndSearchElement()}
-            {buildGridCards(props)}
-        </div>
-    )
-};
 
 export default UsersGrid;
